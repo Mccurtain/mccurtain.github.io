@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>舒尔特方格</title>
+	<style>
+		body {
+			background-color: #f2f2f2;
+		}
+		button {
+			margin: 20px;
+			width: 130px;
+			height: 40px;
+			color: black;
+			border-radius: 5px;
+			padding: 10px 25px;
+			font-family: "Lato", sans-serif;
+			font-weight: 500;
+			background: transparent;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			position: relative;
+			display: inline-block;
+			box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+				7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+		}
+		.grid {
+			margin: 0 auto;
+			width: 400px;
+			height: 400px;
+			border-radius: 3px;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			border: 1px solid #999;
+		}
+		.cell {
+			width: 60px;
+			height: 60px;
+			margin: 8px;
+			display: flex;
+			border-radius: 5px;
+			justify-content: center;
+			align-items: center;
+			font-size: 24px;
+			text-align: center;
+			transition: all 0.1s ease;
+			border: 1px solid #999;
+			cursor: pointer;
+			box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5),
+				7px 7px 20px 0px rgba(0, 0, 0, 0.1), 4px 4px 5px 0px rgba(0, 0, 0, 0.1);
+		}
+		.cell.clicked {
+			background-color: #999;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<center><h1>舒尔特方格</h1>
+	<div class="grid"></div>
+	<a>Version:0.1&nbsp</a><a> By Mccurtain</a>
+	<button onclick="start()">刷新</button></center>
+	<script>
+		// 游戏参数
+		var gridSize = 5;
+		// 创建方格
+		var grid = document.querySelector('.grid');
+		for (var i = 1; i <= gridSize * gridSize; i++) {
+			var cell = document.createElement('div');
+			cell.className = 'cell';
+			cell.id  = i;
+			cell.innerHTML = i;
+			grid.appendChild(cell);
+			start();
+		}
+		// 处理方格点击事件
+		var currentIndex = 1;
+		function checkCell(event) {
+			var cell =  event.target ;
+			var cellIndex = parseInt( cell.id );
+			if (cellIndex == currentIndex) {
+				cell.classList.add('clicked');
+				currentIndex++;
+				if (currentIndex == gridSize * gridSize + 1) {
+					var reQues = confirm("恭喜！你完成了游戏，再来一局？");
+					if (reQues == true){
+						start()
+					}
+				}
+			}
+		}
+		// 添加方格点击事件
+		var cells = Array.from(document.querySelectorAll('.cell'));
+		for (var i = 0; i < cells.length; i++) {
+			cells[i].addEventListener('click', checkCell);
+		}
+		// 随机打乱数组
+		function shuffleArray(array) {
+			for (var i = array.length - 1; i > 0; i--) {
+				var j = Math.floor(Math.random() * (i + 1));
+				var temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+			}
+			return array;
+		}
+		function start(){
+			// 随机打乱方格位置
+			var cells = Array.from(document.querySelectorAll('.cell'));
+			shuffleArray(cells);
+			for (var i = 0; i < cells.length; i++) {
+				grid.appendChild(cells[i]);
+				cells[i].classList.remove('clicked');
+			}
+			currentIndex = 1;
+		}
+	</script>
+</body>
+</html>
